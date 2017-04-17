@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../node_modules/@microsoft/sp-module-interfaces/lib/manifestSchemas/jsonSchemas/clientSideComponentManifestSchema.json",
+
+  "id": "14c4a5c0-a1f5-41d7-b53b-d2955fe33c92",
+  "alias": "RecentSitesWebPart",
+  "componentType": "WebPart",
+  "version": "0.0.1",
+  "manifestVersion": 2,
+
+  "preconfiguredEntries": [{
+    "groupId": "14c4a5c0-a1f5-41d7-b53b-d2955fe33c92",
+    "group": { "default": "Under Development" },
+    "title": { "default": "RecentSites" },
+    "description": { "default": "RecentSites description" },
+    "officeFabricIconFontName": "Page",
+    "properties": {
+      "description": "RecentSites"
+    }
+  }]
+}
