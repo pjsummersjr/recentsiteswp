@@ -1,0 +1,8 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "libraryName": "recentsiteswp",
+    "framework": "react",
+    "version": "1.0.2",
+    "libraryId": "ba50ecd6-33b2-43bd-ae21-fff26b98af42"
+  }
+}

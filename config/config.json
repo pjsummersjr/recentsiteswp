@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "entry": "./lib/webparts/recentSites/RecentSitesWebPart.js",
+      "manifest": "./src/webparts/recentSites/RecentSitesWebPart.manifest.json",
+      "outputPath": "./dist/recent-sites.bundle.js"
+    }
+  ],
+  "externals": {},
+  "localizedResources": {
+    "recentSitesStrings": "webparts/recentSites/loc/{locale}.js"
+  }
+}
