@@ -5,14 +5,41 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
   }
 
-  .row {
-    padding: 20px;
+  .SiteRow {
+    padding: 10px;
+    border: 1px #777 solid;
+    border-radius: 5px;
+    margin-top: 5px;
+  }
+
+  .SiteIcon {
+    padding: 10px 10px 10px 10px;
+    border: 1px #777 solid;
+    background: #ddd;
+    border-radius: 2px;
+  }
+
+  .primaryLink {
+    text-decoration: none;
+  }
+
+  .primaryLink:hover{
+    text-decoration: underline;
+  }
+
+  .siteDetailsColumn {
+    color: #555;
   }
 
   .listItem {
     max-width: 715px;
     margin: 5px auto 5px auto;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .header {
+    padding:5px;
+    background:rgb(141, 163, 198)
   }
 
   .button {

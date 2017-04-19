@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
+import { Version,
+          Environment,
+          EnvironmentType } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
@@ -12,13 +14,31 @@ import RecentSites from './components/RecentSites';
 import { IRecentSitesProps } from './components/IRecentSitesProps';
 import { IRecentSitesWebPartProps } from './IRecentSitesWebPartProps';
 
+import { ISearchClient } from './lib/spsearchjs/SPX/ISearch';
+import { SPSearchClient } from './lib/spsearchjs/SPX/SPX/SPSearchClient';
+
 export default class RecentSitesWebPart extends BaseClientSideWebPart<IRecentSitesWebPartProps> {
+
+  private searchClient: ISearchClient;
+
+  public onInit<T>(): Promise<T> {
+    if(Environment.type == EnvironmentType.Local) {
+      this.searchClient = null;
+    }
+    else {
+      this.searchClient = new SPSearchClient(this.context);
+    }
+
+    return Promise.resolve(null);
+  }
 
   public render(): void {
     const element: React.ReactElement<IRecentSitesProps > = React.createElement(
       RecentSites,
       {
-        sites: []
+        sites: [],
+        searchClient: this.searchClient,
+        title: this.properties.title
       }
     );
 
@@ -40,6 +60,10 @@ export default class RecentSitesWebPart extends BaseClientSideWebPart<IRecentSit
             {
               groupName: strings.BasicGroupName,
               groupFields: [
+                PropertyPaneTextField('title', {
+                  label: strings.TitleFieldLabel,
+                  value: "Recent Sites"
+                }),
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
                 })
