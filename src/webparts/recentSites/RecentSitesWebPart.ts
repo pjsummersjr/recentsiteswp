@@ -16,6 +16,7 @@ import { IRecentSitesWebPartProps } from './IRecentSitesWebPartProps';
 
 import { ISearchClient } from './lib/spsearchjs/SPX/ISearch';
 import { SPSearchClient } from './lib/spsearchjs/SPX/SPX/SPSearchClient';
+import { MockSPSearchClient } from './lib/spsearchjs/SPX/SPX/MockSPSearchClient';
 
 export default class RecentSitesWebPart extends BaseClientSideWebPart<IRecentSitesWebPartProps> {
 
@@ -23,7 +24,7 @@ export default class RecentSitesWebPart extends BaseClientSideWebPart<IRecentSit
 
   public onInit<T>(): Promise<T> {
     if(Environment.type == EnvironmentType.Local) {
-      this.searchClient = null;
+      this.searchClient = new MockSPSearchClient();
     }
     else {
       this.searchClient = new SPSearchClient(this.context);
@@ -33,12 +34,15 @@ export default class RecentSitesWebPart extends BaseClientSideWebPart<IRecentSit
   }
 
   public render(): void {
+    
     const element: React.ReactElement<IRecentSitesProps > = React.createElement(
       RecentSites,
       {
         sites: [],
         searchClient: this.searchClient,
-        title: this.properties.title
+        spSite: this.context.pageContext.site.absoluteUrl,
+        title: this.properties.title,
+        siteHits: this.properties.hitCount
       }
     );
 
@@ -66,6 +70,15 @@ export default class RecentSitesWebPart extends BaseClientSideWebPart<IRecentSit
                 }),
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                })
+              ]
+            },
+            {
+              groupName: strings.SearchConfigGroup,
+              groupFields: [
+                PropertyPaneTextField('hitCount', {
+                  label: strings.SearchResultCount,
+                  value: "10"
                 })
               ]
             }

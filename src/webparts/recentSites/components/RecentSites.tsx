@@ -6,6 +6,9 @@ import styles from './RecentSites.module.scss';
 import { IRecentSitesProps, ISitesProps } from './IRecentSitesProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 
+import { SPQuery } from '../lib/spsearchjs/SPX/SP.Query';
+import { SPUtils } from '../SPUtils/SPUtils';
+
 export interface IRecentSitesState {
   sites: any[];
 }
@@ -25,13 +28,20 @@ export default class RecentSites extends React.Component<IRecentSitesProps, IRec
   }
 
   private _GetInitialSites(): void {
-    let queryStr: string = "*";
+    let tenantName = SPUtils.GetTenantNameFromUrl(this.props.spSite);
+    let queryStr: string = "*+AND+(contentclass:STS_Web+OR+contentclass:STS_Site)+-Path:https:%2f%2f" + tenantName + "-my.sharepoint.com%2f*";
 
     this._GetSites(queryStr);
   }
 
   private _GetSites(query: string): void {
-    this.props.searchClient.getSearchResults(query).then((results) => {
+
+    let spquery: SPQuery = new SPQuery(this.props.spSite);
+    spquery.QueryText = query;
+    spquery.Properties = "GraphQuery:ACTOR(ME,action:1020)";
+    let queryreq = spquery.GetRequestString();
+
+    this.props.searchClient.getSearchResults(queryreq).then((results) => {
       this.state.sites = results.data[0].items;
       this.setState(this.state);
     });
