@@ -30,7 +30,7 @@ export default class RecentSites extends React.Component<IRecentSitesProps, IRec
   private _GetInitialSites(): void {
     let tenantName = SPUtils.GetTenantNameFromUrl(this.props.spSite);
     let queryStr: string = "*+AND+(contentclass:STS_Web+OR+contentclass:STS_Site)+-Path:https:%2f%2f" + tenantName + "-my.sharepoint.com%2f*";
-
+    //queryStr = "*";
     this._GetSites(queryStr);
   }
 
@@ -38,7 +38,8 @@ export default class RecentSites extends React.Component<IRecentSitesProps, IRec
 
     let spquery: SPQuery = new SPQuery(this.props.spSite);
     spquery.QueryText = query;
-    spquery.Properties = "GraphQuery:ACTOR(ME,action:1020)";
+    spquery.Properties = "GraphQuery:ACTOR(ME)";
+    //spquery.RowLimit = this.props.siteHits;
     let queryreq = spquery.GetRequestString();
 
     this.props.searchClient.getSearchResults(queryreq).then((results) => {
