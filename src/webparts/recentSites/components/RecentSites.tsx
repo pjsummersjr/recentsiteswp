@@ -15,8 +15,14 @@ export interface IRecentSitesState {
 
 export default class RecentSites extends React.Component<IRecentSitesProps, IRecentSitesState> {
 
+  private tenantName: string;
+  private baseQuery: string; 
+
   constructor(props: IRecentSitesProps) {
     super(props);
+
+    this.tenantName = SPUtils.GetTenantNameFromUrl(this.props.spSite);
+    this.baseQuery = "+AND+(contentclass:STS_Web+OR+contentclass:STS_Site)+-Path:https:%2f%2f" + this.tenantName + "-my.sharepoint.com%2f*";
 
     this.state = {
       sites:[]
@@ -28,24 +34,35 @@ export default class RecentSites extends React.Component<IRecentSitesProps, IRec
   }
 
   private _GetInitialSites(): void {
-    let tenantName = SPUtils.GetTenantNameFromUrl(this.props.spSite);
-    let queryStr: string = "*+AND+(contentclass:STS_Web+OR+contentclass:STS_Site)+-Path:https:%2f%2f" + tenantName + "-my.sharepoint.com%2f*";
-    //queryStr = "*";
+    let queryStr: string = "*"; 
+    
     this._GetSites(queryStr);
   }
 
   private _GetSites(query: string): void {
 
+    if(query == null || query.length == 0){
+      query = "*";
+    }
+
     let spquery: SPQuery = new SPQuery(this.props.spSite);
-    spquery.QueryText = query;
+
+    spquery.QueryText = query + this.baseQuery;
     spquery.Properties = "GraphQuery:ACTOR(ME)";
-    //spquery.RowLimit = this.props.siteHits;
+    spquery.RowLimit = this.props.siteHits;
+    
     let queryreq = spquery.GetRequestString();
 
     this.props.searchClient.getSearchResults(queryreq).then((results) => {
       this.state.sites = results.data[0].items;
       this.setState(this.state);
     });
+  }
+
+  private _checkAndReset(query: string): void {
+    if(query == null || query.length == 0){
+      this._GetSites("*");
+    }
   }
 
   public render(): React.ReactElement<IRecentSitesProps> {
@@ -57,8 +74,9 @@ export default class RecentSites extends React.Component<IRecentSitesProps, IRec
               <div className={`ms-Grid-col ms-u-md8 ms-fontSize-xl ${styles.header}`}>{this.props.title}</div>    
               <div className={`ms-Grid-col ms-u-md4`}>
                 <SearchBox
-                  onChange={ (newValue) => console.log('SearchBox onChange fired: ' + newValue) }
-                  onSearch={ (newValue) => console.log('SearchBox onSearch fired: ' + newValue) }
+                  labelText="Search sites"
+                  onChange={ (newValue) => this._checkAndReset(newValue)}
+                  onSearch={ (newValue) => this._GetSites(newValue) }
                 />
               </div>          
             </div>

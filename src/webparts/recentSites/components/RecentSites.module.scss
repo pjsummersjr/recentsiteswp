@@ -2,14 +2,14 @@
   .container {
     max-width: 700px;
     margin: 0px auto;
+    padding: 10px 10px 10px 10px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
   }
 
   .SiteRow {
     padding: 10px;
-    border: 1px #777 solid;
-    border-radius: 5px;
     margin-top: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.1);
   }
 
   .SiteIcon {
